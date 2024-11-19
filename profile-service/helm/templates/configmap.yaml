@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "profile-service-backend.fullname" . }}-config
+  labels:
+    {{- include "profile-service-backend.labels" . | nindent 4 }}
+data:
+  DEBUG: {{ .Values.env.DEBUG | quote }}
+  DJANGO_DEBUG: {{ .Values.env.DJANGO_DEBUG | quote }}
+  DJANGO_ALLOWED_HOSTS: {{ .Values.env.DJANGO_ALLOWED_HOSTS | quote }}
+  CORS_ALLOWED_ORIGINS: {{ .Values.env.CORS_ALLOWED_ORIGINS | quote }}
+  CORS_ALLOW_METHODS: {{ .Values.env.CORS_ALLOW_METHODS | quote }}
+  CORS_ALLOW_HEADERS: {{ .Values.env.CORS_ALLOW_HEADERS | quote }}
+  CORS_ALLOW_CREDENTIALS: {{ .Values.env.CORS_ALLOW_CREDENTIALS | quote }}
+  DJANGO_DB_ENGINE: {{ .Values.env.DJANGO_DB_ENGINE | quote }}
+  DJANGO_DB_NAME: {{ .Values.env.DJANGO_DB_NAME | quote }}
+  DJANGO_DB_USER: {{ .Values.env.DJANGO_DB_USER | quote }}
+  DJANGO_DB_HOST: {{ .Values.env.DJANGO_DB_HOST | quote }}
+  DJANGO_DB_PORT: {{ .Values.env.DJANGO_DB_PORT | quote }}
+  DJANGO_SETTINGS_MODULE: {{ .Values.env.DJANGO_SETTINGS_MODULE | quote }}
+  #PYTHONPATH: {{ .Values.env.PYTHONPATH | quote }}
+  CSRF_TRUSTED_ORIGINS: {{ .Values.env.CSRF_TRUSTED_ORIGINS | quote }}
+  OAUTH2_ACCESS_TOKEN_EXPIRE_SECONDS: {{ .Values.env.OAUTH2_ACCESS_TOKEN_EXPIRE_SECONDS | quote }}
+  OAUTH2_REFRESH_TOKEN_EXPIRE_SECONDS: {{ .Values.env.OAUTH2_REFRESH_TOKEN_EXPIRE_SECONDS | quote }}
+  OAUTH2_SCOPE_READ: {{ .Values.env.OAUTH2_SCOPE_READ | quote }}
+  OAUTH2_SCOPE_WRITE: {{ .Values.env.OAUTH2_SCOPE_WRITE | quote }}
+  OAUTH2_SCOPE_GROUPS: {{ .Values.env.OAUTH2_SCOPE_GROUPS | quote }}
+  OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL: {{ .Values.env.OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL | quote }}
+  OAUTH2_PROVIDER_APPLICATION_MODEL: {{ .Values.env.OAUTH2_PROVIDER_APPLICATION_MODEL | quote }}
+  OAUTH2_PROVIDER_ID_TOKEN_MODEL: {{ .Values.env.OAUTH2_PROVIDER_ID_TOKEN_MODEL | quote }}
+  OAUTH2_PROVIDER_GRANT_MODEL: {{ .Values.env.OAUTH2_PROVIDER_GRANT_MODEL | quote }}
+  OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL: {{ .Values.env.OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL | quote }}
+  KEYCLOAK_SERVER_URL: {{ .Values.env.KEYCLOAK_SERVER_URL | quote }}
+  KEYCLOAK_REALM: {{ .Values.env.KEYCLOAK_REALM | quote }}
+  KEYCLOAK_CLIENT_ID: {{ .Values.env.KEYCLOAK_CLIENT_ID | quote }}
+  KEYCLOAK_CACHE_TTL: {{ .Values.env.KEYCLOAK_CACHE_TTL | quote }}
+  LOCAL_DECODE: {{ .Values.env.LOCAL_DECODE | quote }}
+  TOKEN_URL: {{ .Values.env.TOKEN_URL | quote }}
+  GRAYLOG_HOST: {{ .Values.env.GRAYLOG_HOST | quote }}
+  GRAYLOG_PORT: {{ .Values.env.GRAYLOG_PORT | quote }}

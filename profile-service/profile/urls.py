@@ -1,0 +1,100 @@
+from django.urls import path
+from .views import (
+    ProfileView,
+    PlaceOfWorkPostView,
+    PlaceOfWorkPutDeleteView,
+    EducationPostView,
+    EducationPutDeleteView,
+    SkillPostView,
+    SkillPutDeleteView,
+    CreateProfileView,
+    UpdatePersonalInfoView,
+    CheckUserExistsView,
+    FriendProfilesView,
+    FriendSearchView,
+    UserSpecializationPutDeleteView,
+    UserSpecializationPostView, UpdatePersonalQualityView, UpdateAvatarView,
+)
+
+app_name = 'profile'
+
+urlpatterns = [
+    path(
+        'profile/<uuid:pk>/',
+        ProfileView.as_view(),
+        name='profile'
+    ),
+    path(
+        'profile/<uuid:pk>/place_of_work/',
+        PlaceOfWorkPostView.as_view(),
+        name='place_of_work_create'
+    ),
+    path(
+        'profile/<uuid:pk>/place_of_work/<int:place_of_work_id>/',
+        PlaceOfWorkPutDeleteView.as_view(),
+        name='place_of_work_detail'
+    ),
+    path(
+        'profile/<uuid:pk>/personal_quality/',
+        UpdatePersonalQualityView.as_view(),
+        name='update_personal_quality'
+    ),
+    path(
+        'profile/<uuid:pk>/education/',
+        EducationPostView.as_view(),
+        name='education_create'
+    ),
+    path(
+        'profile/<uuid:pk>/education/<int:education_id>/',
+        EducationPutDeleteView.as_view(),
+        name='education_detail'
+    ),
+    path(
+        'profile/<uuid:pk>/avatar/',
+        UpdateAvatarView.as_view(),
+        name='update_avatar'
+    ),
+    path(
+        'users/<uuid:pk>/specializations/',
+        UserSpecializationPostView.as_view(),
+        name='user_specializations'
+    ),
+    path(
+        'users/<uuid:pk>/specializations/<int:specialization_id>/',
+        UserSpecializationPutDeleteView.as_view(),
+        name='user_specialization_detail'
+    ),
+    path(
+        'profile/<uuid:pk>/skills/',
+        SkillPostView.as_view(),
+        name='skill_create'
+    ),
+    path(
+        'profile/<uuid:pk>/skills/<int:skill_id>/',
+        SkillPutDeleteView.as_view(),
+        name='skill_detail'
+    ),
+    path('api/profiles/',
+         CreateProfileView.as_view(),
+         name='create_profile'),
+    path(
+        'profile/<uuid:pk>/update_info/',
+        UpdatePersonalInfoView.as_view(),
+        name='update_personal_info'
+    ),
+    path(
+        'api/check_user/<uuid:user_id>/',
+        CheckUserExistsView.as_view(),
+        name='check_user'
+    ),
+    path(
+        'api/friend-profiles/',
+        FriendProfilesView.as_view(),
+        name='friend-profiles'
+    ),
+    path(
+        'api/friend-search/',
+        FriendSearchView.as_view(),
+        name='friend-search'
+    ),
+]
