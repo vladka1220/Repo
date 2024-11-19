@@ -1,0 +1,130 @@
+replicaCount: 1
+
+image:
+  repository: ${CI_REGISTRY_IMAGE}
+  pullPolicy: IfNotPresent
+  # tag: будет установлен в CI/CD пайплайне
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  name: "friends-service-backend-app"
+  imagePullSecrets:
+    - name: secret-gitlab-cicd
+
+podAnnotations: { }
+
+podSecurityContext:
+  fsGroup: 2000
+
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: friends-service.meerkat-code.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: friends-service-meerkat-tls
+      hosts:
+        - friends-service.meerkat-code.com
+
+resources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: { }
+
+tolerations: [ ]
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - auth-service-backend
+          topologyKey: "kubernetes.io/hostname"
+
+persistence:
+  enabled: true
+  storageClass: "local-path"
+  accessMode: ReadWriteOnce
+  size: 5Gi
+
+env:
+  DEBUG: "False"
+  DJANGO_DEBUG: "False"
+  DJANGO_SECRET_KEY: "l^yfl!g-o7(c##e71_1i9bcl%-%lyk3j&aub@+kq#7vbdfz-i*"
+  DJANGO_ALLOWED_HOSTS: "*,demo.meerkat-code.com,backend-profile.meerkat-code.com,192.168.0.0/16,10.96.0.0/12,*.svc.cluster.local,localhost,127.0.0.1"
+  CORS_ALLOWED_ORIGINS: "http://demo.meerkat-code.com,https://demo.meerkat-code.com,http://meerkat-code.com,https://meerkat-code.com,http://localhost:5170,https://localhost:5170,http://localhost:8000,https://localhost:8000,http://10.0.85.2:5170,https://10.0.85.2:5170,http://192.168.21.73:5170,https://192.168.21.73:5170,http://10.97.216.131:80,https://10.97.216.131:80,https://backend-profile.meerkat-code.com,https://backend-auth.meerkat-code.com,http://backend-auth.meerkat-code.com"
+  CORS_ALLOW_METHODS: "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+  CORS_ALLOW_HEADERS: "accept,accept-encoding,authorization,content-type,dnt,origin,user-agent,x-csrftoken,x-requested-with"
+  CORS_ALLOW_CREDENTIALS: "True"
+  DJANGO_DB_ENGINE: "django.db.backends.postgresql"
+  DJANGO_DB_NAME: "friends_service"
+  DJANGO_DB_USER: "postgres"
+  DJANGO_DB_PASSWORD: "SRcl11kcpXOXEJgfCO2yo0v5yKopIIb6wyzBsJ5xqIPKCuygckeRw2dLmsatUtek"
+  DJANGO_DB_HOST: "acid-postgres-cluster.postgres-cluster.svc.cluster.local"
+  DJANGO_DB_PORT: "5432"
+  DJANGO_SUPERUSER_PASSWORD: "gs!b@DasFh$xW2Y*gFt7!#NJFsiUas@qktsUUQxA"
+  DJANGO_SETTINGS_MODULE: "friends-service.settings"
+  #PYTHONPATH: "./"
+  CSRF_TRUSTED_ORIGINS: "meerkat-code.com,demo.meerkat-code.com,backend-profile.meerkat-code.com,192.168.0.0/16,10.96.0.0/12,*.svc.cluster.local,localhost,127.0.0.1,backend-auth.meerkat-code.com, https://backend-auth.meerkat-code.com"
+  OAUTH2_ACCESS_TOKEN_EXPIRE_SECONDS: "36000"
+  OAUTH2_REFRESH_TOKEN_EXPIRE_SECONDS: "1209600"
+  OAUTH2_SCOPE_READ: "Read scope"
+  OAUTH2_SCOPE_WRITE: "Write scope"
+  OAUTH2_SCOPE_GROUPS: "Access groups"
+  OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL: "oauth2_provider.AccessToken"
+  OAUTH2_PROVIDER_APPLICATION_MODEL: "oauth2_provider.Application"
+  OAUTH2_PROVIDER_ID_TOKEN_MODEL: "oauth2_provider.IDToken"
+  OAUTH2_PROVIDER_GRANT_MODEL: "oauth2_provider.Grant"
+  OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL: "oauth2_provider.RefreshToken"
+  KEYCLOAK_SERVER_URL: "http://localhost:8080/auth"
+  KEYCLOAK_REALM: "TEST"
+  KEYCLOAK_CLIENT_ID: "client-backend"
+  KEYCLOAK_CLIENT_SECRET_KEY: "E2n41fJgl9BPIS3nDk1DQQ7BIPf6PauH"
+  KEYCLOAK_CACHE_TTL: "60"
+  LOCAL_DECODE: "False"
+  SECRET_KEY: "your-secret-key"
+  CLIENT_ID: "your-client-id"
+  CLIENT_SECRET: "your-client-secret"
+  TOKEN_URL: "http://your-domain.com/o/token/"
+  GRAYLOG_HOST: "your-graylog-server.example.com"
+  GRAYLOG_PORT: "12201"
+  LANGUAGE_CODE: "en-us"
+  
