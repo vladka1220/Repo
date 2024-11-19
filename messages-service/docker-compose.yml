@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Сервис для Django-приложения
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - static_volume:/usr/share/nginx/html/static
+    env_file:
+      - .env
+    expose:
+      - "80"
+    networks:
+      - app_network
+
+  # Сервис для Nginx
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - static_volume:/usr/share/nginx/html/static
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - web
+    networks:
+      - app_network
+
+# Определение сетей
+networks:
+  app_network:
+    driver: bridge
+
+# Определение объемов
+volumes:
+  postgres_data:
+  static_volume:

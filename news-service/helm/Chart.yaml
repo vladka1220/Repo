@@ -1,0 +1,5 @@
+apiVersion: v2
+name:  news-service-backend
+description: A Helm chart for Analitik Service Backend Django application
+version: 0.1.0
+appVersion: "1.0.0"
